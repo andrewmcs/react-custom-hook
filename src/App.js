@@ -1,10 +1,11 @@
 import './App.css';
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 
 export default function App() {
 
   const [day, setDay] = useState("Monday");
+  const prevDay = usePrevious(day);
   const getNextDay = () => {
     if (day === "Monday") {
       setDay("Tuesday")
@@ -18,12 +19,20 @@ export default function App() {
       setDay("Monday")
     }
   }
+
   return (
     <div className="App">
-      <h1>Today is {day}</h1>
+      <h1>Today is {day}
+        <br />
+        {prevDay && <span>Previous work day was: {prevDay}</span>}
+      </h1>
       <button onClick={getNextDay}>Get next day</button>
     </div>
   );
 }
 
-function usePrevious(val) { }
+function usePrevious(val) {
+  const ref = useRef("");
+  useEffect(() => { ref.current = val }, [val]);
+  return ref.current;
+}
